@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import './App.css';
+import { Toggle } from "./toggle/Toggle";
+import downloadDark from "./download-icon-black.jpg";
+import downloadLight from "./download-icon-white.png";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState(''); // Keep the input string as state
   const [returnVisible, setReturnVisible] = useState(false); // Hide the return elements until ready to serve to user
   const [queryClicked, setQueryClicked] = useState(false); // Hide or show the API call to users
-
+  const [isDark, setIsDark] = useState(false); // Allow user to view in dark mode.
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value); // e.target is our input field
@@ -66,15 +69,13 @@ function App() {
 
   // Display the download options.
   // Currently serves a single downloadable text file indicating the query that was made.
-  // NOTE: Mock-up had the download button being an icon-based button, not a text-based button.
-  //       I could not figure this out, so made it a text button. This would be a nice change,
-  //       but is non-essential so can be left as-is for the time being.
   function WriteResponse(){
     return(
       <div className="download-all-lines">
         <div className="download-line">
           <p>Click here to download the {searchQuery} data:</p>
-          <button id="downloadBtn" onClick={downloadSearchInfo} type="button">Download</button> 
+          <button id="downloadBtn" onClick={downloadSearchInfo} type="button"><img src={isDark ? downloadDark : downloadLight}
+     	 className="button-Image"></img></button> 
         </div>
       </div>
     )
@@ -102,7 +103,8 @@ function App() {
   // and then an element containing everything we return upon submission,
   // which is defined above.
   return (
-    <div className="app-container">
+    <div className="app-container" data-theme={isDark ? "dark" : "light"}>
+      <Toggle isChecked={isDark} handleChange={() => setIsDark(!isDark)} />
       <div className="search-wrapper">
         <div className="ebi-header">
             European Bioinformatics Institute
