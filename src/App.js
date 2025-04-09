@@ -20,6 +20,9 @@ function App() {
 
   const handleModelChoice = (e) => {
     setChosenModel(e.target.value) // e.target is the select element.
+        // We should also re-hide the hidden elements upon an input change:
+        setReturnVisible(false);
+        setCodeClicked(false);
   }
 
 
