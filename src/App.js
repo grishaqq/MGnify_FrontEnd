@@ -6,6 +6,7 @@ import downloadLight from "./download-icon-white.png";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState(''); // Keep the input string as state
+  const [chosenModel, setChosenModel] = useState(''); // Keep the chosen model as state
   const [returnVisible, setReturnVisible] = useState(false); // Hide the return elements until ready to serve to user
   const [codeClicked, setCodeClicked] = useState(false); // Hide or show the generated code to users
   const [isDark, setIsDark] = useState(false); // Allow user to view in dark mode.
@@ -17,6 +18,10 @@ function App() {
     setCodeClicked(false);
   };
 
+  const handleModelChoice = (e) => {
+    setChosenModel(e.target.value) // e.target is the select element.
+  }
+
 
   // Once the form is submit, we need to pass the input back to the LLM,
   // and then we need to wait to hear back from this and the web server,
@@ -24,7 +29,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault(); // so that the page wouldn't reload
     // Add search logic here. Send Query off to the LLM.
-    console.log('Searching for:', searchQuery);
+    console.log('Searching for: ', searchQuery, ' with: ', chosenModel);
     // NOTE: The following should only activate once we hear two responses:
     // First, we should hear back from our product's back-end, to be able to display what the code that made the call is.
     // Second, we should hear back from the web server, to be able to serve the results.
@@ -37,7 +42,7 @@ function App() {
   // Current version serves user a text file of the search they made
   function downloadSearchInfo() {
     // create file contents (DUMMY FUNCTIONALITY)
-    const fileData = `You searched for ${searchQuery} in the MGNify database!`
+    const fileData = `You searched for ${searchQuery} in the MGNify database with ${chosenModel}!`
     // create a blob with those contents (Useful functionality)
     const blob = new Blob([fileData], { type: "text/plain" });
     // create a link in the DOM from the blob (Useful functionality)
@@ -130,6 +135,13 @@ function App() {
             value={searchQuery}
             onChange={handleSearchChange}
           />
+          <label>Select a model to search with: </label>
+          <select className="models" name="models" id="models" onChange={handleModelChoice} required>
+            <option value="DeepSeek">DeepSeek</option>
+            <option value="Claude">Claude</option>
+            <option value="ChatGPT">ChatGPT</option>
+            <option value="Grok">Grok</option>
+          </select>
           <button id="submitBtn" type="submit">Get Results</button>
         </form>
         {returnVisible && <ReturnComponents />}

@@ -77,6 +77,19 @@ input[type="text"],textarea {
   box-sizing: border-box;
 }
 
+.models {
+  float: left;
+  width: 20%;
+  padding: 8px;
+  font-size: 0.8rem;
+  background-color: var(--bg-colour);
+  color: var(--text-colour);
+  border: 1px solid var(--border-colour);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
 button {
   background-color: var(--primary-green);
   color: var(--bg-colour);
