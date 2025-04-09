@@ -6,7 +6,7 @@ import downloadLight from "./download-icon-white.png";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState(''); // Keep the input string as state
-  const [chosenModel, setChosenModel] = useState(''); // Keep the chosen model as state
+  const [chosenModel, setChosenModel] = useState('DeepSeek'); // Keep the chosen model as state, default to DeepSeek
   const [returnVisible, setReturnVisible] = useState(false); // Hide the return elements until ready to serve to user
   const [codeClicked, setCodeClicked] = useState(false); // Hide or show the generated code to users
   const [isDark, setIsDark] = useState(false); // Allow user to view in dark mode.
