@@ -12,37 +12,27 @@ code {
     monospace;
 }
 
-/* root class allows us to define colour variables*/
+/* root class allows us to define colour variables, this makes reuse 
+   across different elements more clear, and allows for theming.     */
 :root{
-  --bg-colour: #ffffff;
-  --header-colour: #45A049;
-  --text-colour: #000;
+  --bg-colour: #FFFFFF;
+  --primary-green: #45A049;
+  --secondary-green: #4CAF50;
+  --text-colour: #0A0A0A;
   --form-colour: #efefef;
   --label-colour: #333;
-  --input-colour: #FFFFFF;
-  --input-text-colour: #000000;
-  --button-colour: #4CAF50;
-  --button-text-colour: #FFFFFF;
-  --hover-colour: #45A049;
   --return-colour: #dfdfdf;
   --return-colour-text: #676767;
-  --toggle-bg:var(--header-colour);
-  --toggle-fg:var(--button-colour);
 }
 
+/* data-theme attribute lets us switch between light and dark mode */
 [data-theme="dark"] {
   --bg-colour: #0A0A0A;
-  --header-colour: #37833A;
+  --primary-green: #37833A;
+  --secondary-green: #307433;
   --text-colour: #FFFFFF;
   --form-colour: #212121;
   --label-colour: #EEEEEE;
-  --input-colour: #1A1A1A;
-  --input-text-colour: #FFFFFF;
-  --button-colour: #307433;
-  --button-text-colour: #000000;
-  --hover-colour: #37833A;
   --return-colour: #303030;
   --return-colour-text: #A9A9A9;
-  --toggle-bg:var(--header-colour);
-  --toggle-fg:var(--button-colour);
 }

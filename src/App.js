@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import './App.css';
-import { Toggle } from "./toggle/Toggle";
+// import { Toggle } from "./toggle/Toggle";
 import downloadDark from "./download-icon-black.jpg";
 import downloadLight from "./download-icon-white.png";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState(''); // Keep the input string as state
   const [returnVisible, setReturnVisible] = useState(false); // Hide the return elements until ready to serve to user
-  const [queryClicked, setQueryClicked] = useState(false); // Hide or show the API call to users
+  const [codeClicked, setCodeClicked] = useState(false); // Hide or show the generated code to users
   const [isDark, setIsDark] = useState(false); // Allow user to view in dark mode.
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value); // e.target is our input field
     // We should also re-hide the hidden elements upon an input change:
     setReturnVisible(false);
-    setQueryClicked(false);
+    setCodeClicked(false);
   };
 
 
@@ -52,16 +52,16 @@ function App() {
   // Components we only want you to see when we have the data back from the web server
   function ReturnComponents() {
     // the "WriteResponse" component is going to have all the download options.
-    // the "WriteQuery" component is going to display the generated API query.
+    // the "WriteCode" component is going to display the generated code.
     // NOTE: I used a "form" here to keep the styling consistent with the input form.
     //       This is not actually a form, so it might be better to change this in future.
     return (
       <form>
         <WriteResponse />
-        <div className="query-show">
+        <div className="code-show">
           <p> Advanced: </p>
-          <button id="apiBtn" onClick={handleQueryClick} type="button"> Click here to show/hide the query we generated</button>
-          {queryClicked && <WriteQuery />}
+          <button id="apiBtn" onClick={handleCodeClick} type="button"> Click here to show/hide the code we generated</button>
+          {codeClicked && <WriteCode />}
         </div>
       </form>
     )
@@ -74,37 +74,49 @@ function App() {
       <div className="download-all-lines">
         <div className="download-line">
           <p>Click here to download the {searchQuery} data:</p>
-          <button id="downloadBtn" onClick={downloadSearchInfo} type="button"><img src={isDark ? downloadDark : downloadLight}
-     	 className="button-Image"></img></button> 
+          <button id="downloadBtn" onClick={downloadSearchInfo} type="button">
+            <img src={isDark ? downloadDark : downloadLight} className="button-Image">
+            </img>
+          </button> 
         </div>
       </div>
     )
   }
 
-  // Display the generated query.
-  // Currently displays a notice that says we do not have a query to return.
-  function WriteQuery(){
+  // Display the generated code.
+  // Currently displays a notice that says we do not have any code to return.
+  function WriteCode(){
     return( 
-      <div className="queryReturn">
-        <p> No query yet! sorry!</p>
+      <div className="codeReturn">
+        <p> No code generated yet! sorry!</p>
         <p>It will be written here for users to read and check.</p>
       </div>
     )
   }
 
-  // Change the state of "queryClicked" when the 'click here to...' button is pressed.
-  function handleQueryClick(){
-    setQueryClicked(!queryClicked)
+  // Change the state of "codeClicked" when the 'click here to...' button is pressed.
+  function handleCodeClick(){
+    setCodeClicked(!codeClicked)
   }
 
   // The main body of the app. Contains all the text labels, inputs, and buttons
-  // Page structure should be clear from the code: some headers,
+  // Page structure should be clear from the code:
+  // The 'theme toggle' goes from light to dark, some headers,
   // then an input form with a textbox and a submission button,
   // and then an element containing everything we return upon submission,
   // which is defined above.
   return (
     <div className="app-container" data-theme={isDark ? "dark" : "light"}>
-      <Toggle isChecked={isDark} handleChange={() => setIsDark(!isDark)} />
+      <div className="theme-toggle">
+        <input
+          type="checkbox"
+          id="check"
+          className="toggle"
+          onChange={() => setIsDark(!isDark)}
+          checked={isDark}
+        />
+        <label className="toggleAnim" htmlFor="check"></label>
+      </div>
       <div className="search-wrapper">
         <div className="ebi-header">
             European Bioinformatics Institute

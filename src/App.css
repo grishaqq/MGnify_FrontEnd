@@ -1,4 +1,3 @@
-
 body, html {
   margin: 0;
   padding: 0;
@@ -18,8 +17,6 @@ body, html {
   background-color: var(--bg-colour);
 }
 
-
-
 .search-wrapper {
   width: 100%;
   max-width: 600px;
@@ -27,7 +24,7 @@ body, html {
 
 .ebi-header {
   text-align: left;
-  color: var(--header-colour); /* Green colour taken from existing EBI web pages, pairing it with black is based on their pages also. */
+  color: var(--primary-green); /* Green colour taken from existing EBI web pages, pairing it with black is based on their pages also. */
   font-size: 1.2rem;
   margin-bottom: 20px;
   text-transform: uppercase;
@@ -72,8 +69,8 @@ input[type="text"],textarea {
   width: 100%;
   padding: 15px;
   font-size: 1rem;
-  background-color: var(--input-colour);
-  color: var(--input-text-colour);
+  background-color: var(--bg-colour);
+  color: var(--text-colour);
   border: 1px solid var(--border-colour);
   border-radius: 4px;
   margin-bottom: 20px;
@@ -81,8 +78,8 @@ input[type="text"],textarea {
 }
 
 button {
-  background-color: var(--button-colour);
-  color: var(--button-text-colour);
+  background-color: var(--primary-green);
+  color: var(--bg-colour);
   border: none;
   font-size: 1rem;
   border-radius: 4px;
@@ -103,11 +100,11 @@ button {
 .button-Image{
   max-width: 60%;
   height: auto;
-}
+} /* Ensure the download image in the buttons is not too large.*/
 
 
 button:hover {
-  background-color: var(--hover-colour);
+  background-color: var(--secondary-green);
 }
 
 .download-line {
@@ -116,7 +113,7 @@ button:hover {
   margin-bottom: 10px;
 }
 
-.query-show{
+.code-show{
   width:max-content;
   background-color: var(--return-colour);
   color: var(--return-colour-text);
@@ -129,3 +126,46 @@ button:hover {
   color: var(--return-colour-text);
   border-radius: none;
 }
+
+/* The following CSS is to display and animate the theme toggle.*/
+
+.theme-toggle {
+  position: absolute;
+  top: 2em;
+  right: 2em;
+} /* Locates the toggle in the top right */
+
+.toggle {
+  visibility: hidden; 
+} /* This makes the checkbox invisible, we only see the animated label. */
+
+.toggleAnim {
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+} /* Sizes the label and places the moving circle in the middle of the slider. */
+
+.toggleAnim::before {
+  content: "";
+  height: 1em;
+  width: 2em;
+  border-radius: 1em;
+  background-color: var(--primary-green);
+  margin-right: 0.5em;
+  transition: background-color 250ms ease-in-out;
+} /* This creates the slider. */
+
+.toggleAnim::after {
+  content: "";
+  height: 0.8em;
+  width: 0.8em;
+  border-radius: 1em;
+  background-color: var(--secondary-green);
+  position: absolute;
+  left: 0.2em;
+  transition: background-color 250ms ease-in-out, transform 250ms ease-in-out;
+} /* This creates the circle. */
+
+.toggle:checked + .toggleAnim::after {
+  transform: translateX(100%);
+} /* This shifts the circle left and right when toggled.*/
