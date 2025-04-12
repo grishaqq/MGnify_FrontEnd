@@ -56,6 +56,13 @@ form {
   margin-bottom: 10px;
 }
 
+.returnSection {
+  padding: 20px;
+  background-color: var(--form-colour);
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
 label {
   display: block;
   text-align: left;

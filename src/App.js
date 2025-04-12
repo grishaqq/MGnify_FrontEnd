@@ -7,22 +7,18 @@ import downloadLight from "./download-icon-white.png";
 function App() {
   const [searchQuery, setSearchQuery] = useState(''); // Keep the input string as state
   const [chosenModel, setChosenModel] = useState('DeepSeek'); // Keep the chosen model as state, default to DeepSeek
+  const [formJson, setFormJson] = useState({model: '', query: ''}); // Keep the values of the submit form as a JSON object
   const [returnVisible, setReturnVisible] = useState(false); // Hide the return elements until ready to serve to user
   const [codeClicked, setCodeClicked] = useState(false); // Hide or show the generated code to users
   const [isDark, setIsDark] = useState(false); // Allow user to view in dark mode.
 
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value); // e.target is our input field
-    // We should also re-hide the hidden elements upon an input change:
-    setReturnVisible(false);
-    setCodeClicked(false);
   };
 
   const handleModelChoice = (e) => {
     setChosenModel(e.target.value) // e.target is the select element.
-        // We should also re-hide the hidden elements upon an input change:
-        setReturnVisible(false);
-        setCodeClicked(false);
   }
 
 
@@ -30,28 +26,39 @@ function App() {
   // and then we need to wait to hear back from this and the web server,
   // and serve the results to the user.
   const handleSubmit = (e) => {
-    e.preventDefault(); // so that the page wouldn't reload
-    // Add search logic here. Send Query off to the LLM.
-    console.log('Searching for: ', searchQuery, ' with: ', chosenModel);
+    // This ensures the page won't reload
+    e.preventDefault(); 
+    // We want to replace the old return page - indicate that we are loading the new response.
+    setReturnVisible(false);
+    // This updates the JSON state:
+    setFormJson({...formJson, model: chosenModel, query: searchQuery});
+    // Send the query off to the backend, wait for the response:
+    generateResult();
+    // Once that's done, serve the user the return section:
     // NOTE: The following should only activate once we hear two responses:
     // First, we should hear back from our product's back-end, to be able to display what the code that made the call is.
     // Second, we should hear back from the web server, to be able to serve the results.
     setReturnVisible(true); 
   };
-
+  
+  // This should pass off the JSON to the back end, and serve us the results (and the generated code).
+  function generateResult() {
+    
+  }
 
   // THIS IS CURRENTLY A DUMMY FUNCTION FOR DEVELOPMENT PURPOSES
-  // Final version should download the result of the API call
-  // Current version serves user a text file of the search they made
+  // Final version should pass off info to the backend, and place
+  // the resultant file in the
+  // Current version create user a text file of the search they made
   function downloadSearchInfo() {
     // create file contents (DUMMY FUNCTIONALITY)
-    const fileData = `You searched for ${searchQuery} in the MGNify database with ${chosenModel}!`
+    const fileData = `You searched for ${formJson.query} in the MGNify database with ${formJson.model}!`
     // create a blob with those contents (Useful functionality)
     const blob = new Blob([fileData], { type: "text/plain" });
     // create a link in the DOM from the blob (Useful functionality)
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.download = `${searchQuery}.txt`; // filetype may be specified by backend, clarify later.
+    link.download = `${formJson.query.substring(0,10)}.txt`; // filetype may be specified by backend, clarify later.
     link.href = url;
     // click the link and download file. (Useful functionality)
     link.click();
@@ -61,17 +68,15 @@ function App() {
   function ReturnComponents() {
     // the "WriteResponse" component is going to have all the download options.
     // the "WriteCode" component is going to display the generated code.
-    // NOTE: I used a "form" here to keep the styling consistent with the input form.
-    //       This is not actually a form, so it might be better to change this in future.
     return (
-      <form>
+      <div className="returnSection">
         <WriteResponse />
         <div className="code-show">
           <p> Advanced: </p>
           <button id="apiBtn" onClick={handleCodeClick} type="button"> Click here to show/hide the code we generated</button>
           {codeClicked && <WriteCode />}
         </div>
-      </form>
+      </div>
     )
   }
 
@@ -81,7 +86,7 @@ function App() {
     return(
       <div className="download-all-lines">
         <div className="download-line">
-          <p>Click here to download the {searchQuery} data:</p>
+          <p>Click here to download the {formJson.query.substring(0,10)} data:</p>
           <button id="downloadBtn" onClick={downloadSearchInfo} type="button">
             <img src={isDark ? downloadDark : downloadLight} className="button-Image">
             </img>
