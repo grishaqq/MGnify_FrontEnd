@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 // import { Toggle } from "./toggle/Toggle";
-import downloadDark from "./download-icon-black.jpg";
-import downloadLight from "./download-icon-white.png";
+import downloadDark from "./images/download-icon-black.jpg";
+import downloadLight from "./images/download-icon-white.png";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState(''); // Keep the input string as state
