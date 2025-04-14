@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './App.css';
-// import { Toggle } from "./toggle/Toggle";
 import downloadDark from "./images/download-icon-black.jpg";
 import downloadLight from "./images/download-icon-white.png";
 
