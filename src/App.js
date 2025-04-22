@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import './App.css';
-// import { Toggle } from "./toggle/Toggle";
 import downloadDark from "./images/download-icon-black.jpg";
 import downloadLight from "./images/download-icon-white.png";
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState(''); // Keep the input string as state
-  const [chosenModel, setChosenModel] = useState('DeepSeek'); // Keep the chosen model as state, default to DeepSeek
+  const [searchQuery, setSearchQuery] = useState('');               // Keep the input string as state
+  const [chosenModel, setChosenModel] = useState('DeepSeek');       // Keep the chosen model as state, default to DeepSeek
   const [formJson, setFormJson] = useState({model: '', query: ''}); // Keep the values of the submit form as a JSON object
-  const [returnVisible, setReturnVisible] = useState(false); // Hide the return elements until ready to serve to user
-  const [codeClicked, setCodeClicked] = useState(false); // Hide or show the generated code to users
-  const [isDark, setIsDark] = useState(false); // Allow user to view in dark mode.
-
+  const [returnVisible, setReturnVisible] = useState(false);        // Hide the return elements until ready to serve to user
+  const [codeClicked, setCodeClicked] = useState(false);            // Hide or show the generated code to users
+  const [isDark, setIsDark] = useState(false);                      // Allow user to view in dark mode.
+  const [dataGot, setDataGot] = useState({code: '', data: ''});     // Keep the stuff received from the back end as state 
+                                                                    // (currently assuming this will be sent as a single JSON 
+                                                                    // with the code used for the API call, and a single bit of 
+                                                                    // return data. This can and should be changed if needed.)
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value); // e.target is our input field
@@ -33,34 +35,48 @@ function App() {
     // This updates the JSON state:
     setFormJson({...formJson, model: chosenModel, query: searchQuery});
     // Send the query off to the backend, wait for the response:
-    generateResult();
+    
+    // generateResult();
+    
     // Once that's done, serve the user the return section:
-    // NOTE: The following should only activate once we hear two responses:
-    // First, we should hear back from our product's back-end, to be able to display what the code that made the call is.
-    // Second, we should hear back from the web server, to be able to serve the results.
+    // NOTE: The following should only activate once we hear back from the backend,
+    //       the 'await's in generateResult should enforce this if I understand them correctly.
     setReturnVisible(true); 
   };
   
   // This should pass off the JSON to the back end, and serve us the results (and the generated code).
-  function generateResult() {
-    
+  async function generateResult() {
+    // This POSTs the form response to the back end (location unknown right now!)
+    const postResponse = await fetch(figureoutthelocation.com, {
+      method: "POST",
+      body: JSON.stringify(formJson),
+    });
+    // This puts the stuff that was posted into the console to verify it: (testing purposes only)
+    const testData = await postResponse.json()
+    console.log(testData);
+    // Then GET the what the back end has to send to us.
+    const response = await fetch(figureoutthelocation.com);
+    const data = await response.json();
+    // set the global data variable so this can actually be used elsewhere.
+    setDataGot(data);
   }
 
-  // THIS IS CURRENTLY A DUMMY FUNCTION FOR DEVELOPMENT PURPOSES
-  // Final version should pass off info to the backend, and place
-  // the resultant file in the
-  // Current version create user a text file of the search they made
+  // Finally serve the user the results of the query via the download button.
+  // The current version uses dummy file data for testing the front end, this
+  // is easily fixed by using the 'dataGot' variable kept as state.
   function downloadSearchInfo() {
-    // create file contents (DUMMY FUNCTIONALITY)
+    // create file contents.
+    // The file contents should be {dataGot.data} once the comms with the back end are set up,
+    // so at that point we should skip the creation of the data, and just make a blob with that.
     const fileData = `You searched for ${formJson.query} in the MGNify database with ${formJson.model}!`
-    // create a blob with those contents (Useful functionality)
+    // create a blob with those contents 
     const blob = new Blob([fileData], { type: "text/plain" });
-    // create a link in the DOM from the blob (Useful functionality)
+    // create a link in the DOM from the blob 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.download = `${formJson.query.substring(0,10)}.txt`; // filetype may be specified by backend, clarify later.
     link.href = url;
-    // click the link and download file. (Useful functionality)
+    // click the link and download file.
     link.click();
   }
 
@@ -98,6 +114,7 @@ function App() {
 
   // Display the generated code.
   // Currently displays a notice that says we do not have any code to return.
+  // Should display {dataGot.code} when comms with the backend are set up.
   function WriteCode(){
     return( 
       <div className="codeReturn">
